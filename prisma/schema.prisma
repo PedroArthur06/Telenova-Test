@@ -1,14 +1,27 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Cdr {
+  uuid               String   @id @default(uuid()) @map("xml_cdr_uuid")
+  startStamp         DateTime @map("start_stamp")
+  
+  callerIdNumber     String   @map("caller_id_number")
+  destinationNumber  String   @map("destination_number")
+  
+  billsec            Int      
+  
+  hangupCause        String   @default("NORMAL_CLEARING") @map("hangup_cause")
+  recordPath         String   @map("record_path")
+  recordName         String   @map("record_name")
+  domainName         String   @map("domain_name")
+  
+  createdAt          DateTime @default(now()) @map("created_at")
+
+  @@map("v_xml_cdr")
 }
