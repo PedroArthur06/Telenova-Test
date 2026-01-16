@@ -15,6 +15,14 @@ export class CdrService {
     const startDate = start ? parseISO(start) : startOfDay(new Date());
     const endDate = end ? parseISO(end) : endOfDay(new Date());
 
+    if (start && isNaN(Date.parse(start as string))) {
+      throw new Error("Invalid start date");
+    }
+
+    if (end && isNaN(Date.parse(end as string))) {
+      throw new Error("Invalid end date");
+    }
+
     const records = await this.repository.findManyByDomain({
       domain,
       startDate,
