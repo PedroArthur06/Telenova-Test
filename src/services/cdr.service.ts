@@ -1,53 +1,41 @@
-import { PrismaClient } from "@prisma/client";
-import { startOfDay, endOfDay, parseISO } from "date-fns";
-
-const prisma = new PrismaClient();
+import { startOfDay, endOfDay, parseISO } from 'date-fns';
+import { ICdrRepository } from '../repositories/ICdrRepository';
+import { PrismaCdrRepository } from '../repositories/CdrRepository';
 
 export class CdrService {
-    // Pega o extrato com parametros de data e domínio
-    async getExtract(domain: string, date: string) {
-        const startDate = startOfDay(parseISO(date));
-        const endDate = endOfDay(parseISO(date));
+  private repository: ICdrRepository;
 
-        const cdrs = await prisma.cdr.findMany({
-            where: {
-                domainName: domain,
-                startStamp: {
-                    gte: startDate,
-                    lte: endDate
-                }
-            },
-            orderBy: {
-                startStamp: 'asc'
-            }   
-        });
+  // implementa a interface do repository
+  constructor() {
+    this.repository = new PrismaCdrRepository();
+  }
+  
+  // busca o extrato de um domínio entre duas datas
+  async getExtrato(domain: string, start?: string, end?: string) {
+    const startDate = start ? parseISO(start) : startOfDay(new Date());
+    const endDate = end ? parseISO(end) : endOfDay(new Date());
 
-        const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
-
-        return cdrs.map(record => ({
-            uuid: record.uuid,
-            data: record.startStamp,
-            origem: record.callerIdNumber,
-            destino: record.destinationNumber,
-            duracao_segundos: record.billsec,
-            status: record.hangupCause,
-            recording_url: `${baseUrl}/recording?id=${record.uuid}`
-        }));
-    }
-
-    // Pega o path do arquivo de gravação
-    async getRecordingPath(uuid: string, domain: string) {
-    const record = await prisma.cdr.findFirst({
-      where: {
-        uuid: uuid,
-        domainName: domain
-      },
-      select: {
-        recordPath: true,
-        recordName: true
-      }
+    const records = await this.repository.findManyByDomain({
+      domain,
+      startDate,
+      endDate
     });
 
-    return record;
+    const baseUrl = process.env.API_BASE_URL || 'http://localhost:3000';
+    
+    return records.map(record => ({
+      uuid: record.uuid,
+      data: record.startStamp,
+      origem: record.callerIdNumber,
+      destino: record.destinationNumber,
+      duracao_segundos: record.billsec,
+      status: record.hangupCause,
+      recording_url: `${baseUrl}/recording?id=${record.uuid}`
+    }));
+  }
+
+  // busca o path do arquivo de gravação
+  async getRecordingPath(uuid: string, domain: string) {
+    return await this.repository.findRecordingPath(uuid, domain);
   }
 }
