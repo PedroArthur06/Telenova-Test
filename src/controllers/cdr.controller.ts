@@ -9,7 +9,7 @@ export class CdrController {
   async list(req: Request, res: Response) {
     try {
       const { start } = req.query;
-      const domain = (req as any).domain;
+      const domain = (req as any).requestDomain;
 
       const data = await service.getExtract(
         domain, 
@@ -27,7 +27,7 @@ export class CdrController {
   async download(req: Request, res: Response) {
     try {
       const { id } = req.query;
-      const domain = (req as any).domain;
+      const domain = (req as any).requestDomain;
 
       if (!id) return res.status(400).json({ error: 'Missing id parameter' });
 
@@ -37,12 +37,12 @@ export class CdrController {
         return res.status(404).json({ error: 'Recording not found' });
       }
 
-      const mockPath = path.resolve(__dirname, '../../mock_audio.wav');
+      const mockPath = path.resolve(process.cwd(), 'mock_audio.wav');
       
       return res.download(mockPath, fileInfo.recordName);
 
     } catch (error) {
-      return res.status(500).json({ error: 'error downloading file' });
+      return res.status(500).json({ error: 'Error downloading file' });
     }
   }
 }
