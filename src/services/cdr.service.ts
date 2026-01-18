@@ -11,7 +11,7 @@ export class CdrService {
   }
   
   // busca o extrato de um domínio entre duas datas
-  async getExtrato(domain: string, start?: string, end?: string) {
+  async getExtract(domain: string, start?: string, end?: string) {
     const startDate = start ? parseISO(start) : startOfDay(new Date());
     const endDate = end ? parseISO(end) : endOfDay(new Date());
 
