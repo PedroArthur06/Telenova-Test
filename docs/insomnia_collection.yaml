@@ -1,0 +1,125 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Teste Telenova
+meta:
+  id: wrk_ffdf41d4562a4f49a0710942963778d9
+  created: 1768596968348
+  modified: 1768599340380
+  description: ""
+collection:
+  - url: "{{ _.base_url }}/cdr"
+    name: Listar Extrato
+    meta:
+      id: req_91eb8faa762a4b3fbba69191f8b4a4ae
+      created: 1768596978845
+      modified: 1768765050508
+      isPrivate: false
+      description: ""
+      sortKey: -1768596978845
+    method: GET
+    parameters:
+      - name: start
+        value: 2026-01-01T00:00:00
+        description: ""
+        disabled: false
+      - name: end
+        value: 2026-12-31T23:59:59
+        description: ""
+        disabled: false
+    headers:
+      - name: User-Agent
+        value: insomnia/12.2.0
+        description: ""
+        disabled: false
+      - name: api-key
+        value: teste-123
+        description: ""
+        disabled: false
+      - name: domain
+        value: empresa.telenova.com.br
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/recording"
+    name: Baixar Gravação
+    meta:
+      id: req_99aac17b598a4133883c19dfe3237943
+      created: 1768596981957
+      modified: 1768765152173
+      isPrivate: false
+      description: ""
+      sortKey: -1768596981957
+    method: GET
+    parameters:
+      - name: id
+        value: 44d811ca-9340-4e73-a45d-c1e707da45c5
+        description: ""
+        disabled: false
+    headers:
+      - name: User-Agent
+        value: insomnia/12.2.0
+        description: ""
+        disabled: false
+      - name: api-key
+        value: teste-123
+        description: ""
+        disabled: false
+      - name: domain
+        value: empresa.telenova.com.br
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/health"
+    name: Health Check
+    meta:
+      id: req_233af4e30394465dbfea55bfa2ac94bf
+      created: 1768596984576
+      modified: 1768765207026
+      isPrivate: false
+      description: ""
+      sortKey: -1768596984576
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.2.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_aee9d602973451b86a776f3730cbd9833475ee81
+    created: 1768596968351
+    modified: 1768596968351
+environments:
+  name: Base Environment
+  meta:
+    id: env_aee9d602973451b86a776f3730cbd9833475ee81
+    created: 1768596968350
+    modified: 1768764976722
+    isPrivate: false
+  data:
+    base_url: http://localhost:3000
+    api-key: teste-123
+    domain: empresa.telenova.com.br
